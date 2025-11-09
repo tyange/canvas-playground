@@ -1,4 +1,4 @@
-import { Download, RotateCcw, RotateCw } from 'lucide-react'
+import { Download, Minus, Plus, RotateCcw, RotateCw } from 'lucide-react'
 
 interface EditorPanelProps {
   onUndoHandler: () => void
@@ -17,20 +17,20 @@ export default function EditorPanel({
 }: EditorPanelProps) {
   return (
     <div className="w-full flex justify-center gap-5 py-5">
-      <button onClick={onUndoHandler}>
-        <RotateCcw />
+      <button className="border border-gray-200 rounded cursor-pointer p-2 shadow-sm hover:shadow-md hover:border-gray-300 transition-all" onClick={onUndoHandler}>
+        <RotateCcw className="text-gray-600" />
       </button>
-      <button onClick={onRedoHandler}>
-        <RotateCw />
+      <button className="border border-gray-200 rounded cursor-pointer p-2 shadow-sm hover:shadow-md hover:border-gray-300 transition-all" onClick={onRedoHandler}>
+        <RotateCw className="text-gray-600" />
       </button>
-      <button onClick={onDownloadHandler}>
-        <Download />
+      <button className="border border-gray-200 rounded cursor-pointer p-2 shadow-sm hover:shadow-md hover:border-gray-300 transition-all" onClick={onDownloadHandler}>
+        <Download className="text-gray-600" />
       </button>
-      <button onClick={onZoomInHandler}>
-        <span>+</span>
+      <button className="border border-gray-200 rounded cursor-pointer p-2 shadow-sm hover:shadow-md hover:border-gray-300 transition-all" onClick={onZoomInHandler}>
+        <Plus className="text-gray-600" />
       </button>
-      <button onClick={onZoomOutHandler}>
-        <span>-</span>
+      <button className="border border-gray-200 rounded cursor-pointer p-2 shadow-sm hover:shadow-md hover:border-gray-300 transition-all" onClick={onZoomOutHandler}>
+        <Minus className="text-gray-600" />
       </button>
     </div>
   )

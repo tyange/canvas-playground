@@ -189,7 +189,7 @@ export default function Editor() {
   }
 
   return (
-    <div className="border rounded-md flex flex-col w-fit h-fit bg-slate-600">
+    <div className="border rounded-md flex flex-col w-fit h-fit border-gray-300 shadow-md">
       <EditorPanel
         onUndoHandler={onUndoHandler}
         onRedoHandler={onRedoHandler}
@@ -197,7 +197,7 @@ export default function Editor() {
         onZoomInHandler={onZoomInHandler}
         onZoomOutHandler={onZoomOutHandler}
       />
-      <div>
+      <div className="w-full flex justify-center">
         <input
           id="fileInput"
           type="file"
@@ -210,7 +210,7 @@ export default function Editor() {
         </label>
       </div>
       <div
-        className="overflow-auto"
+        className="w-full h-full p-3 border-t border-gray-300 mt-3 overflow-auto"
         style={{ width: '700px', height: '500px' }}
       >
         <canvas
