@@ -6,6 +6,7 @@ export interface MaskedArea {
   width: number
   height: number
   zoomLevel: number
+  bgColor: string
 }
 
 export const INITIAL_MASKED_AREA = {
@@ -14,6 +15,7 @@ export const INITIAL_MASKED_AREA = {
   width: 0,
   height: 0,
   zoomLevel: 1,
+  bgColor: 'rgba(255,255,255,1)',
 }
 
 interface EditorAtom {

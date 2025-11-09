@@ -14,6 +14,7 @@ export default function Editor() {
   const [isDragging, setIsDragging] = useState(false)
   const [maskedArea, setMaskedArea] = useState<MaskedArea>(INITIAL_MASKED_AREA)
   const [fileName, setFileName] = useState('')
+  const [pickedColor, setPickedColor] = useState(INITIAL_MASKED_AREA.bgColor)
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
@@ -49,14 +50,31 @@ export default function Editor() {
   }
 
   const mouseDownHandler: MouseEventHandler<HTMLCanvasElement> = (e) => {
-    setIsDragging(true)
+    const canvas = canvasRef.current
+    if (!canvas)
+      return
+
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })
+    if (!ctx)
+      return
 
     const { x, y } = getCanvasCoordinates(e)
 
+    const canvasX = Math.floor(x * editorState.zoomLevel)
+    const canvasY = Math.floor(y * editorState.zoomLevel)
+
+    const imageData = ctx.getImageData(canvasX, canvasY, 1, 1)
+    const [r, g, b, a] = imageData.data
+
+    const pickedColorString = `rgba(${r},${g},${b},${a / 255})`
+    setPickedColor(pickedColorString)
+
+    setIsDragging(true)
     setMaskedArea({
       ...INITIAL_MASKED_AREA,
       x,
       y,
+      bgColor: pickedColorString,
     })
   }
 
@@ -96,7 +114,7 @@ export default function Editor() {
     }
 
     editorState.maskedAreas.forEach((area) => {
-      ctx!.fillStyle = 'rgba(255,0,0,1)'
+      ctx!.fillStyle = area.bgColor
       ctx!.fillRect(area.x, area.y, area.width, area.height)
     })
   }
@@ -106,7 +124,7 @@ export default function Editor() {
       return
     }
 
-    ctx.fillStyle = 'rgba(255,0,0,0.2)'
+    ctx.fillStyle = pickedColor
 
     ctx.fillRect(
       maskedArea.x,
