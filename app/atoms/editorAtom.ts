@@ -45,66 +45,68 @@ export const editorAtom = atom(initialAtom)
 export const editorActionsAtom = atom(
   null,
   (get, set, action: EditorAction) => {
+    const current = get(editorAtom)
+
     switch (action.type) {
-      case 'setOriginImageSource':
-        return {
-          ...get(editorAtom),
+      case 'setOriginImageSource': {
+        set(editorAtom, {
+          ...current,
           originImageSource: action.payload,
-        }
-      case 'masked':
-        return {
-          ...get(editorAtom),
-          maskedAreas: [...get(editorAtom).maskedAreas, action.payload],
-          currentStep: get(editorAtom).currentStep + 1,
+        })
+        break
+      }
+      case 'masked': {
+        set(editorAtom, {
+          ...current,
+          maskedAreas: [...current.maskedAreas, action.payload],
+          currentStep: current.currentStep + 1,
           beforeMaskedAreasHistory: [],
-        }
+        })
+        break
+      }
       case 'undo': {
-        const newMaskedAreas = [...get(editorAtom).maskedAreas]
+        const newMaskedAreas = [...current.maskedAreas]
         newMaskedAreas.pop()
 
-        return {
-          ...get(editorAtom),
-          maskedAreas: [...newMaskedAreas],
-          currentStep: get(editorAtom).currentStep - 1,
+        set(editorAtom, {
+          ...current,
+          maskedAreas: newMaskedAreas,
+          currentStep: current.currentStep - 1,
           beforeMaskedAreasHistory: [
-            ...get(editorAtom).beforeMaskedAreasHistory,
-            [...get(editorAtom).maskedAreas],
+            ...current.beforeMaskedAreasHistory,
+            [...current.maskedAreas],
           ],
-        }
+        })
+        break
       }
       case 'redo': {
-        const newBeforeMaskedAreasHistory = [...get(editorAtom).beforeMaskedAreasHistory]
-        newBeforeMaskedAreasHistory.pop()
+        const newBeforeMaskedAreasHistory = [...current.beforeMaskedAreasHistory]
+        const lastHistory = newBeforeMaskedAreasHistory.pop()
 
-        return {
-          ...get(editorAtom),
-          currentStep: get(editorAtom).currentStep + 1,
-          maskedAreas: [
-            ...get(editorAtom).beforeMaskedAreasHistory[
-              get(editorAtom).beforeMaskedAreasHistory.length - 1
-            ],
-          ],
-          beforeMaskedAreasHistory: [...newBeforeMaskedAreasHistory],
-        }
+        set(editorAtom, {
+          ...current,
+          currentStep: current.currentStep + 1,
+          maskedAreas: lastHistory || [],
+          beforeMaskedAreasHistory: newBeforeMaskedAreasHistory,
+        })
+        break
       }
       case 'zoomIn': {
-        const zoomInLevel = get(editorAtom).zoomLevel + 0.1
-
-        return {
-          ...get(editorAtom),
+        const zoomInLevel = current.zoomLevel + 0.1
+        set(editorAtom, {
+          ...current,
           zoomLevel: zoomInLevel > 0.1 ? zoomInLevel : 0.1,
-        }
+        })
+        break
       }
       case 'zoomOut': {
-        const zoomOutLevel = get(editorAtom).zoomLevel - 0.1
-
-        return {
-          ...get(editorAtom),
+        const zoomOutLevel = current.zoomLevel - 0.1
+        set(editorAtom, {
+          ...current,
           zoomLevel: zoomOutLevel > 0.1 ? zoomOutLevel : 0.1,
-        }
+        })
+        break
       }
-      default:
-        return get(editorAtom)
     }
   },
 )
