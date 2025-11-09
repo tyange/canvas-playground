@@ -7,7 +7,7 @@ module.exports = {
     exec_mode: 'fork',
     env: {
       NODE_ENV: 'production',
-      PORT: 3000,
+      PORT: 3001,
     },
     log_file: './logs/combined.log',
     out_file: './logs/out.log',
